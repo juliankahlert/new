@@ -1,0 +1,73 @@
+---
+vite.config.js: |
+  import { defineConfig } from "vite";
+  import vue from "@vitejs/plugin-vue";
+  import { resolve } from 'path';
+
+  export default defineConfig({
+    base: resolve(__dirname, "./dist/"),
+    plugins: [vue()],
+  });
+preload.js: |
+  window.addEventListener("DOMContentLoaded", () => {
+    const replaceText = (selector, text) => {
+      const element = document.getElementById(selector);
+      if (element) element.innerText = text;
+    };
+
+    for (const type of ["chrome", "node", "electron"]) {
+      replaceText(`${type}-version`, process.versions[type]);
+    }
+  })
+main.cjs: |
+  const { app, BrowserWindow } = require("electron");
+  const path = require("path");
+
+  function createWindow() {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+
+    win.loadFile(`${__dirname}/dist/index.html`)
+  }
+
+  app.whenReady().then(() => {
+    createWindow();
+
+    app.on("activate", () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  });
+
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
+electron-builder.config.cjs: |+
+  const buildVersion = "2024jul5"
+
+  const config = {
+    directories: {
+      output: 'dist',
+      buildResources: 'buildResources',
+    },
+    files: [
+      'dist/assets/**',
+      'dist/index.html',
+      'main.cjs',
+    ],
+    extraMetadata: {
+      version: buildVersion,
+    },
+  }
+
+  module.exports = config
+
+...
