@@ -1,0 +1,13 @@
+---
+gitpack:
+  name: new
+  category: tool
+  files:
+  - "{{prefix}}/bin/new"
+  - "/etc/new/module.d/vve.new.rb"
+  - "/etc/new/module.d/vve.new.rb.yaml"
+  - "/etc/new/module.d/vvee.new.rb"
+  - "/etc/new/module.d/vvee.new.rb.yaml"
+  add:
+  - sh:
+    - sudo make PREFIX={{prefix}} install
