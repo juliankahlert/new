@@ -67,8 +67,10 @@ class VVEEScaffoldModuleBuilder < ScaffoldModuleBuilder
 
     def run
       system("rm --force --recursive #{@dir}")
+      system("npm install create-vite")
       system("npm init vite #{File.basename(@dir)} -- --template vue")
       system("cd #{@dir} && npm install")
+      system("cd #{@dir} && npm install --save element-plus")
       system("cd #{@dir} && npm install -D unplugin-vue-components unplugin-auto-import")
       system("cd #{@dir} && npm install --save-dev yaml")
       system("cd #{@dir} && npm install --save-dev electron")
