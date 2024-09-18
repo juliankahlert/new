@@ -67,13 +67,17 @@ class VVEEScaffoldModuleBuilder < ScaffoldModuleBuilder
 
     def run
       system("rm --force --recursive #{@dir}")
+      system("npm install create-vite")
       system("npm init vite #{File.basename(@dir)} -- --template vue")
       system("cd #{@dir} && npm install")
+      system("cd #{@dir} && npm install --save element-plus")
       system("cd #{@dir} && npm install -D unplugin-vue-components unplugin-auto-import")
+      system("cd #{@dir} && npm install --save-dev yaml")
       system("cd #{@dir} && npm install --save-dev electron")
       system("cd #{@dir} && npm install --save-dev electron-builder")
 
       File.write(File.join(@dir, 'electron-builder.config.cjs'), @assets['electron-builder.config.cjs'])
+      File.write(File.join(@dir, 'CHANGELOG.yaml'), @assets['CHANGELOG.yaml'])
       File.write(File.join(@dir, 'vite.config.js'), @assets['vite.config.js'])
       File.write(File.join(@dir, 'preload.js'), @assets['preload.js'])
       File.write(File.join(@dir, 'main.cjs'), @assets['main.cjs'])

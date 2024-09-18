@@ -8,7 +8,14 @@ vite.config.js: |
   import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
   export default defineConfig({
-    base: resolve(__dirname, "./dist/"),
+    base: "./",
+    build: {
+      cssCodeSplit: false,
+
+      // debug
+      sourcemap: true,
+      minify: false
+    },
     plugins: [
       vue(),
       AutoImport({
@@ -62,23 +69,40 @@ main.cjs: |
     }
   });
 electron-builder.config.cjs: |+
-  const buildVersion = "2024jul5"
+  const fs = require('fs');
+  const path = require('path');
+  const yaml = require('yaml');
 
+  const changelog_path = path.join(__dirname, 'CHANGELOG.yaml');
+  const changelog_file = fs.readFileSync(changelog_path, 'utf8');
+  const changelog_yaml = yaml.parse(changelog_file);
+
+  function get_latest_version(changelog_yaml) {
+    const version = changelog_yaml.version;
+    return `${version.major}.${version.minor}`;
+  }
+
+  const build_version = get_latest_version(changelog_yaml);
   const config = {
     directories: {
       output: 'dist',
       buildResources: 'buildResources',
     },
     files: [
-      'dist/assets/**',
+      'dist/assets/*',
       'dist/index.html',
+      'preload.cjs',
       'main.cjs',
     ],
     extraMetadata: {
-      version: buildVersion,
+      version: build_version,
     },
   }
 
   module.exports = config
-
-...
+CHANGELOG.yaml: |+
+  ---
+  version:
+    major: 0
+    minor: 1
+    patch: 0
