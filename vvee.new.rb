@@ -70,6 +70,7 @@ class VVEEScaffoldModuleBuilder < ScaffoldModuleBuilder
       system("npm init vite #{File.basename(@dir)} -- --template vue")
       system("cd #{@dir} && npm install")
       system("cd #{@dir} && npm install -D unplugin-vue-components unplugin-auto-import")
+      system("cd #{@dir} && npm install --save-dev yaml")
       system("cd #{@dir} && npm install --save-dev electron")
       system("cd #{@dir} && npm install --save-dev electron-builder")
 
