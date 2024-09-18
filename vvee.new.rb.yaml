@@ -80,5 +80,9 @@ electron-builder.config.cjs: |+
   }
 
   module.exports = config
-
-...
+CHANGELOG.yaml: |+
+  ---
+  version:
+    major: 0
+    minor: 1
+    patch: 0

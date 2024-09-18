@@ -74,6 +74,7 @@ class VVEEScaffoldModuleBuilder < ScaffoldModuleBuilder
       system("cd #{@dir} && npm install --save-dev electron-builder")
 
       File.write(File.join(@dir, 'electron-builder.config.cjs'), @assets['electron-builder.config.cjs'])
+      File.write(File.join(@dir, 'CHANGELOG.yaml'), @assets['CHANGELOG.yaml'])
       File.write(File.join(@dir, 'vite.config.js'), @assets['vite.config.js'])
       File.write(File.join(@dir, 'preload.js'), @assets['preload.js'])
       File.write(File.join(@dir, 'main.cjs'), @assets['main.cjs'])
